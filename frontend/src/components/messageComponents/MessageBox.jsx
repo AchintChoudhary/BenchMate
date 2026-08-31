@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import DefaultAvatar from "../../assets/boy.png";
 import { FaArrowLeft } from "react-icons/fa";
 import {
 	setChatDetailsBox,
@@ -98,10 +99,14 @@ const MessageBox = ({ chatId }) => {
 						<FaArrowLeft title="Back" fontSize={14} />
 					</div>
 					<img
-						src={getChatImage(selectedChat, authUserId)}
-						alt=""
-						className="h-9 w-9 rounded-full border border-[#E5EAF3] object-cover"
-					/>
+  src={getChatImage(selectedChat, authUserId)}
+  alt="Profile"
+  onError={(e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = DefaultAvatar;
+  }}
+  className="h-9 w-9 rounded-full border border-[#E5EAF3] object-cover"
+/>
 					<h1 className="line-clamp-1 text-base font-semibold text-[#172033]">
 						{getChatName(selectedChat, authUserId)}
 					</h1>
