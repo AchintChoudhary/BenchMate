@@ -1,5 +1,6 @@
 import React from "react";
 import { MdOutlineClose } from "react-icons/md";
+import DefaultAvatar from "../assets/boy.png";
 import { useDispatch, useSelector } from "react-redux";
 import { setProfileDetail } from "../redux/slices/conditionSlice";
 import { toast } from "react-toastify";
@@ -37,10 +38,13 @@ const ProfileDetail = () => {
 					</div>
 					<div className="flex w-full items-center justify-evenly self-end sm:w-fit sm:flex-col">
 						<img
-							src={user.image}
-							alt="user/image"
-							className="h-20 w-20 rounded-md border border-[#E5EAF3] object-cover"
-						/>
+  src={user?.image || DefaultAvatar}
+  alt="Profile"
+  onError={(e) => {
+    e.currentTarget.src = DefaultAvatar;
+  }}
+  className="h-20 w-20 rounded-md border border-[#E5EAF3] object-cover"
+/>
 						<div className="flex flex-col">
 							<button
 								onClick={handleUpdate}

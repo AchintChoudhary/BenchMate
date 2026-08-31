@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { FaPenAlt } from "react-icons/fa";
+import DefaultAvatar from "../../assets/boy.png";
 import { addMyChat, addSelectedChat } from "../../redux/slices/myChatSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -78,11 +79,15 @@ const MyChat = () => {
                     dispatch(addSelectedChat(chat));
                   }}
                 >
-                  <img
-                    className="h-12 min-w-12 rounded-full border border-[#E5EAF3] object-cover"
-                    src={getChatImage(chat, authUserId)}
-                    alt="img"
-                  />
+                <img
+  className="h-12 min-w-12 rounded-full border border-[#E5EAF3] object-cover"
+  src={getChatImage(chat, authUserId)}
+  alt="Profile"
+  onError={(e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = DefaultAvatar;
+  }}
+/>
                   <div className="w-full min-w-0">
                     <div className="flex w-full items-center justify-between gap-2">
                       <span className="line-clamp-1 flex-1 text-sm font-semibold capitalize text-[#172033]">

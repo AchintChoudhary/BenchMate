@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import DefaultAvatar from "../assets/boy.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -159,11 +160,14 @@ const Header = () => {
 						}}
 						className="flex flex-nowrap items-center gap-1 rounded-full border border-[#E5EAF3] bg-[#F8FAFF] px-1.5 py-1 shadow-sm transition-all cursor-pointer hover:border-[#BFD3FF] hover:bg-[#EFF6FF]"
 					>
-						<img
-							src={user.image}
-							alt="gg"
-							className="h-9 w-9 rounded-full border border-[#E5EAF3] object-cover"
-						/>
+					<img
+  src={user?.image || DefaultAvatar}
+  alt="Profile"
+  onError={(e) => {
+    e.currentTarget.src = DefaultAvatar;
+  }}
+  className="h-9 w-9 rounded-full border border-[#E5EAF3] object-cover"
+/>
 						<span className="text-[#2563EB]">
 							{isHeaderMenu ? (
 								<MdKeyboardArrowDown fontSize={20} />
