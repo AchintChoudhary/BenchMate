@@ -41,6 +41,15 @@ app.get("/", (req, res) => {
 	});
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "Server is running",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+
 // All routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
