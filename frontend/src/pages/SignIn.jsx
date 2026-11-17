@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addAuth } from "../redux/slices/authSlice";
 import { checkValidSignInFrom } from "../utils/validate";
 import { PiEye, PiEyeClosedLight } from "react-icons/pi";
+import GoogleAuthButton from "../components/GoogleAuthButton";
 
 const SignIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [load, setLoad] = useState("");
 	const [isShow, setIsShow] = useState(false);
+	const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -51,6 +53,7 @@ const SignIn = () => {
 	};
 
 	const handleLogin = (e) => {
+		if (load !== "" || isGoogleLoading) return;
 		if (email && password) {
 			const validError = checkValidSignInFrom(email, password);
 			if (validError) {
@@ -81,6 +84,7 @@ const SignIn = () => {
 						name="email"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
+						disabled={load !== "" || isGoogleLoading}
 					/>
 					<h3 className="p-1 text-xl font-semibold text-[#172033]">
 						Enter Password
@@ -93,6 +97,7 @@ const SignIn = () => {
 							name="password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
+							disabled={load !== "" || isGoogleLoading}
 						/>
 						<span
 							onClick={() => setIsShow(!isShow)}
@@ -106,14 +111,27 @@ const SignIn = () => {
 						</span>
 					</div>
 					<button
+						disabled={load !== "" || isGoogleLoading}
 						onClick={(e) => {
 							e.preventDefault();
 							handleLogin(e);
 						}}
-						className="mt-5 w-full rounded-full border border-[#D7E3FF] bg-[#2563EB] px-5 py-4 text-lg font-semibold text-white transition-all hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-50"
+						className="mt-5 w-full cursor-pointer rounded-full border border-[#D7E3FF] bg-[#2563EB] px-5 py-4 text-lg font-semibold text-white transition-all hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						{load == "" ? "SignIn" : load}
 					</button>
+					<div className="my-4 flex w-full items-center gap-3">
+						<div className="h-[1px] w-full bg-[#E5EAF3]"></div>
+						<span className="text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
+							or
+						</span>
+						<div className="h-[1px] w-full bg-[#E5EAF3]"></div>
+					</div>
+					<GoogleAuthButton
+						disabled={load !== ""}
+						onAuthStart={() => setIsGoogleLoading(true)}
+						onAuthEnd={() => setIsGoogleLoading(false)}
+					/>
 					<div className="mt-3 flex w-full items-center">
 						<div className="h-[1px] w-full bg-[#E5EAF3]"></div>
 						<Link to="#">

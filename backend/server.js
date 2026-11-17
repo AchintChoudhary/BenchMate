@@ -7,9 +7,17 @@ const mongoose = require("mongoose");
 
 const app = express();
 
+const allowedOrigins = [
+	process.env.FRONTEND_URL,
+	"https://bench-mate-ten.vercel.app",
+	"http://localhost:5173",
+]
+	.filter(Boolean)
+	.map((origin) => origin.replace(/\/$/, ""));
+
 const corsOptions = {
-	origin: [process.env.FRONTEND_URL,"https://bench-mate-seven.vercel.app", "http://localhost:5173"],
-	methods: ["GET", "POST", "PUT", "DELETE"],
+	origin: allowedOrigins,
+	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	credentials: true,
 }; 

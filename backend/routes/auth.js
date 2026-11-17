@@ -5,5 +5,6 @@ const wrapAsync = require("../middlewares/wrapAsync");
 
 router.post("/signup", wrapAsync(authControllers.registerUser));
 router.post("/signin", wrapAsync(authControllers.loginUser));
+router.post("/google", wrapAsync(authControllers.googleAuth));
 
 module.exports = router;

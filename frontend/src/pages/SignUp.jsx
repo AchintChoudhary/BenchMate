@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { checkValidSignUpFrom } from "../utils/validate";
 import { PiEye, PiEyeClosedLight } from "react-icons/pi";
+import GoogleAuthButton from "../components/GoogleAuthButton";
 
 const SignUp = () => {
 	const [firstName, setFirstName] = useState("");
@@ -11,6 +12,7 @@ const SignUp = () => {
 	const [password, setPassword] = useState("");
 	const [load, setLoad] = useState("");
 	const [isShow, setIsShow] = useState(false);
+	const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 	const navigate = useNavigate();
 
 	const signUpUser = (e) => {
@@ -50,6 +52,7 @@ const SignUp = () => {
 	};
 
 	const handleSignup = (e) => {
+		if (load !== "" || isGoogleLoading) return;
 		if (firstName && lastName && email && password) {
 			const validError = checkValidSignUpFrom(
 				firstName,
@@ -85,6 +88,7 @@ const SignUp = () => {
 						name="firstName"
 						value={firstName}
 						onChange={(e) => setFirstName(e.target.value)}
+						disabled={load !== "" || isGoogleLoading}
 						required
 					/>
 					<h3 className="p-1 text-xl font-semibold text-[#172033]">
@@ -97,6 +101,7 @@ const SignUp = () => {
 						name="lastName"
 						value={lastName}
 						onChange={(e) => setLastName(e.target.value)}
+						disabled={load !== "" || isGoogleLoading}
 						required
 					/>
 					<h3 className="p-1 text-xl font-semibold text-[#172033]">
@@ -109,6 +114,7 @@ const SignUp = () => {
 						name="email"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
+						disabled={load !== "" || isGoogleLoading}
 						required
 					/>
 					<h3 className="p-1 text-xl font-semibold text-[#172033]">
@@ -122,6 +128,7 @@ const SignUp = () => {
 							name="password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
+							disabled={load !== "" || isGoogleLoading}
 						/>
 						<span
 							onClick={() => setIsShow(!isShow)}
@@ -135,14 +142,27 @@ const SignUp = () => {
 						</span>
 					</div>
 					<button
+						disabled={load !== "" || isGoogleLoading}
 						onClick={(e) => {
-							handleSignup(e);
 							e.preventDefault();
+							handleSignup(e);
 						}}
-						className="mt-5 w-full rounded-full border border-[#D7E3FF] bg-[#2563EB] px-5 py-4 text-lg font-semibold text-white transition-all hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-50"
+						className="mt-5 w-full cursor-pointer rounded-full border border-[#D7E3FF] bg-[#2563EB] px-5 py-4 text-lg font-semibold text-white transition-all hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						{load == "" ? "SignUp" : load}
 					</button>
+					<div className="my-4 flex w-full items-center gap-3">
+						<div className="h-[1px] w-full bg-[#E5EAF3]"></div>
+						<span className="text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
+							or
+						</span>
+						<div className="h-[1px] w-full bg-[#E5EAF3]"></div>
+					</div>
+					<GoogleAuthButton
+						disabled={load !== ""}
+						onAuthStart={() => setIsGoogleLoading(true)}
+						onAuthEnd={() => setIsGoogleLoading(false)}
+					/>
 					<div className="my-3 flex w-full items-center">
 						<div className="h-[1px] w-full bg-[#E5EAF3]"></div>
 						<Link to="/signin">
