@@ -52,6 +52,45 @@ const myChatSlice = createSlice({
 			);
 			state.newMessageRecieved = newMessageRecieved;
 		},
+		updateUserInChats: (state, action) => {
+			const updatedUser = action.payload;
+			if (!updatedUser || !updatedUser._id) return;
+			if (state.selectedChat) {
+				if (state.selectedChat.users) {
+					state.selectedChat.users = state.selectedChat.users.map((u) =>
+						u._id === updatedUser._id ? { ...u, ...updatedUser } : u
+					);
+				}
+				if (
+					state.selectedChat.groupAdmin &&
+					state.selectedChat.groupAdmin._id === updatedUser._id
+				) {
+					state.selectedChat.groupAdmin = {
+						...state.selectedChat.groupAdmin,
+						...updatedUser,
+					};
+				}
+			}
+			if (state.chat && state.chat.length > 0) {
+				state.chat = state.chat.map((chat) => {
+					let updatedUsers = chat.users;
+					if (chat.users) {
+						updatedUsers = chat.users.map((u) =>
+							u._id === updatedUser._id ? { ...u, ...updatedUser } : u
+						);
+					}
+					let updatedAdmin = chat.groupAdmin;
+					if (chat.groupAdmin && chat.groupAdmin._id === updatedUser._id) {
+						updatedAdmin = { ...chat.groupAdmin, ...updatedUser };
+					}
+					return {
+						...chat,
+						users: updatedUsers,
+						groupAdmin: updatedAdmin,
+					};
+				});
+			}
+		},
 	},
 });
 
@@ -62,5 +101,6 @@ export const {
 	deleteSelectedChat,
 	addNewMessageRecieved,
 	removeNewMessageRecieved,
+	updateUserInChats,
 } = myChatSlice.actions;
 export default myChatSlice.reducer;

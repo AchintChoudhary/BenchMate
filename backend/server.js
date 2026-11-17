@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
-dotenv.config();
+const path = require("path");
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -8,10 +9,10 @@ const app = express();
 
 const corsOptions = {
 	origin: [process.env.FRONTEND_URL,"https://bench-mate-seven.vercel.app", "http://localhost:5173"],
-	methods: ["GET", "POST", "DELETE"],
+	methods: ["GET", "POST", "PUT", "DELETE"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	credentials: true,
-};
+}; 
 
 app.use(cors(corsOptions));
 app.use(express.json());

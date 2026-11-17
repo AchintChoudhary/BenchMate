@@ -11,6 +11,7 @@ import ChatShimmer from "../loading/ChatShimmer";
 import { addSelectedChat } from "../../redux/slices/myChatSlice";
 import { SimpleDateAndTime } from "../../utils/formateDateTime";
 import socket from "../../socket/socket";
+import DefaultAvatar from "../../assets/boy.png";
 
 const UserSearch = () => {
 	const dispatch = useDispatch();
@@ -127,8 +128,11 @@ const UserSearch = () => {
 								>
 									<img
 										className="h-12 min-w-12 rounded-full border border-[#E5EAF3] object-cover"
-										src={user?.image}
+										src={user?.image || DefaultAvatar}
 										alt="img"
+										onError={(e) => {
+											e.currentTarget.src = DefaultAvatar;
+										}}
 									/>
 									<div className="w-full min-w-0">
 										<span className="line-clamp-1 capitalize text-sm font-semibold text-[#172033]">

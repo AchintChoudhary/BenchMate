@@ -8,6 +8,7 @@ import { FaArrowLeft, FaSearch } from "react-icons/fa";
 import { ChatShimmerSmall } from "../loading/ChatShimmer";
 import { IoCheckmarkCircleOutline, IoPersonAddOutline } from "react-icons/io5";
 import { VscError } from "react-icons/vsc";
+import DefaultAvatar from "../../assets/boy.png";
 
 const MemberAdd = ({ setMemberAddBox }) => {
 	const dispatch = useDispatch();
@@ -148,9 +149,12 @@ const MemberAdd = ({ setMemberAddBox }) => {
 									className="w-full h-12 border-slate-500 border rounded-lg flex justify-start items-center p-2 font-semibold gap-2 hover:bg-black/50 transition-all cursor-pointer text-white"
 								>
 									<img
-										className="h-10 min-w-10 rounded-full"
-										src={user?.image}
+										className="h-10 min-w-10 rounded-full object-cover"
+										src={user?.image || DefaultAvatar}
 										alt="img"
+										onError={(e) => {
+											e.currentTarget.src = DefaultAvatar;
+										}}
 									/>
 									<div className="w-full relative">
 										<span className="line-clamp-1 capitalize">

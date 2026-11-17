@@ -7,6 +7,7 @@ import {
     SimpleDateMonthDay,
     SimpleTime,
 } from "../../utils/formateDateTime";
+import DefaultAvatar from "../../assets/boy.png";
 
 const AllMessages = ({ allMessage }) => {
     const chatBox = useRef();
@@ -88,8 +89,11 @@ const AllMessages = ({ allMessage }) => {
                                     (allMessage[idx + 1]?.sender?._id !==
                                     message?.sender?._id ? (
                                         <img
-                                            src={message?.sender?.image}
+                                            src={message?.sender?.image || DefaultAvatar}
                                             alt=""
+                                            onError={(e) => {
+                                                e.currentTarget.src = DefaultAvatar;
+                                            }}
                                             className="h-8 w-8 rounded-full border border-[#E5EAF3] object-cover"
                                         />
                                     ) : (

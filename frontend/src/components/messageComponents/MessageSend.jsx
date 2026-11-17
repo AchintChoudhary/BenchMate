@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FaFolderOpen, FaPaperPlane } from "react-icons/fa";
-import { MdOutlineClose } from "react-icons/md";
+import { useEffect, useState } from "react";
+import { FaPaperPlane } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { setSendLoading, setTyping } from "../../redux/slices/conditionSlice";
 import {
@@ -13,9 +12,6 @@ import socket from "../../socket/socket";
 
 let lastTypingTime;
 const MessageSend = ({ chatId }) => {
-	const mediaFile = useRef();
-	// const [mediaBox, setMediaBox] = useState(false);
-	// const [mediaURL, setMediaURL] = useState("");
 	const [newMessage, setMessage] = useState("");
 	const dispatch = useDispatch();
 	const isSendLoading = useSelector(
@@ -30,31 +26,11 @@ const MessageSend = ({ chatId }) => {
 	useEffect(() => {
 		socket.on("typing", () => dispatch(setTyping(true)));
 		socket.on("stop typing", () => dispatch(setTyping(false)));
-	}, []);
-
-	// Media Box Control
-	const handleMediaBox = () => {
-		if (mediaFile.current?.files[0]) {
-			// const file = mediaFile.current.files[0];
-			// const url = URL.createObjectURL(file);
-			// setMediaURL(url);
-			// setMediaBox(true);
-			toast.warn("Comming soon...");
-		} else {
-			// setMediaBox(false);
-		}
-	};
-
-	// Media Box Hidden && Input file remove
-	// const clearMediaFile = () => {
-	//     mediaFile.current.value = "";
-	//     setMediaURL("");
-	//     setMediaBox(false);
-	// };
+	}, [dispatch]);
 
 	// Send Message Api call
 	const handleSendMessage = async () => {
-		if (newMessage?.trim()) {
+		if (newMessage?.trim() && !isSendLoading) {
 			const message = newMessage?.trim();
 			setMessage("");
 			socket.emit("stop typing", selectedChat._id);
@@ -108,27 +84,11 @@ const MessageSend = ({ chatId }) => {
 		<>
 			<form
 				className="flex h-[88px] w-full items-center gap-2 border-t border-[#E5EAF3] bg-white p-3 text-[#172033]"
-				onSubmit={(e) => e.preventDefault()}
+				onSubmit={(e) => {
+					e.preventDefault();
+					handleSendMessage();
+				}}
 			>
-				<label
-					htmlFor="media"
-					className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-[#F8FAFF] text-[#2563EB] transition-colors hover:bg-[#EFF6FF]"
-				>
-					<FaFolderOpen
-						title="Open File"
-						size={18}
-						className="active:scale-75"
-					/>
-				</label>
-				<input
-					ref={mediaFile}
-					type="file"
-					name="image"
-					accept="image/png, image/jpg, image/gif, image/jpeg"
-					id="media"
-					className="hidden"
-					onChange={handleMediaBox}
-				/>
 				<input
 					type="text"
 					className="w-full rounded-full border border-[#E5EAF3] bg-[#F8FAFF] px-4 py-3 text-sm text-[#172033] outline-none placeholder:text-[#94A3B8] focus:border-[#BFDBFE] focus:bg-white"
@@ -139,8 +99,9 @@ const MessageSend = ({ chatId }) => {
 				<span className="flex items-center justify-center">
 					{newMessage?.trim() && !isSendLoading && (
 						<button
-							className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2563EB] text-white shadow-[0_12px_24px_rgba(37,99,235,0.25)] transition-all hover:bg-[#1D4ED8]"
-							onClick={handleSendMessage}
+							type="submit"
+							className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-[#2563EB] text-white shadow-[0_12px_24px_rgba(37,99,235,0.25)] transition-all hover:bg-[#1D4ED8]"
+							title="Send"
 						>
 							<FaPaperPlane
 								title="Send"
@@ -150,7 +111,11 @@ const MessageSend = ({ chatId }) => {
 						</button>
 					)}
 					{isSendLoading && (
-						<button className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2563EB] text-white shadow-[0_12px_24px_rgba(37,99,235,0.25)]">
+						<button
+							type="button"
+							className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2563EB] text-white shadow-[0_12px_24px_rgba(37,99,235,0.25)]"
+							disabled
+						>
 							<LuLoader
 								title="loading..."
 								fontSize={16}

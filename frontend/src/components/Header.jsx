@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import DefaultAvatar from "../assets/boy.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
@@ -161,7 +161,7 @@ const Header = () => {
 						className="flex flex-nowrap items-center gap-1 rounded-full border border-[#E5EAF3] bg-[#F8FAFF] px-1.5 py-1 shadow-sm transition-all cursor-pointer hover:border-[#BFD3FF] hover:bg-[#EFF6FF]"
 					>
 					<img
-  src={user?.image || DefaultAvatar}
+  src={(!user?.image || user.image.includes("icon-library.com")) ? DefaultAvatar : user.image}
   alt="Profile"
   onError={(e) => {
     e.currentTarget.src = DefaultAvatar;

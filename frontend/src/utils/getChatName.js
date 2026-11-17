@@ -28,7 +28,11 @@ export const getChatImage = (chat, authUserId) => {
       ? chat.users?.[1]
       : chat.users?.[0];
 
-  return otherUser?.image || DefaultAvatar;
+  const img = otherUser?.image;
+  if (!img || img.includes("icon-library.com")) {
+    return DefaultAvatar;
+  }
+  return img;
 };
 
 export default getChatName;

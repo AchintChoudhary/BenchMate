@@ -10,6 +10,7 @@ import { CiCircleInfo } from "react-icons/ci";
 import { toast } from "react-toastify";
 import { addSelectedChat } from "../../redux/slices/myChatSlice";
 import { setLoading } from "../../redux/slices/conditionSlice";
+import DefaultAvatar from "../../assets/boy.png";
 
 const MemberRemove = ({ setMemberAddBox }) => {
 	const dispatch = useDispatch();
@@ -76,9 +77,12 @@ const MemberRemove = ({ setMemberAddBox }) => {
 							className="w-full h-12 border-slate-500 border rounded-lg flex justify-start items-center p-2 font-semibold gap-2 transition-all cursor-pointer text-white"
 						>
 							<img
-								className="h-10 min-w-10 rounded-full"
-								src={user?.image}
+								className="h-10 min-w-10 rounded-full object-cover"
+								src={user?.image || DefaultAvatar}
 								alt="img"
+								onError={(e) => {
+									e.currentTarget.src = DefaultAvatar;
+								}}
 							/>
 							<div className="w-full relative">
 								<span className="line-clamp-1 capitalize">

@@ -5,12 +5,14 @@ const authSlice = createSlice({
 	initialState: null,
 	reducers: {
 		addAuth: (state, action) => {
-			return action.payload;
+			if (!action.payload) return null;
+			return state ? { ...state, ...action.payload } : action.payload;
 		},
-		removeAuth: (state) => {
+		removeAuth: () => {
 			return null;
 		},
 	},
 });
+
 export const { addAuth, removeAuth } = authSlice.actions;
 export default authSlice.reducer;
